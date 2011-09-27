@@ -2,8 +2,8 @@ package com.vkassin;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.types.CGSize;
+//import org.cocos2d.nodes.CCDirector;
+//import org.cocos2d.types.CGSize;
 
 import android.util.Log;
 
@@ -36,7 +36,7 @@ public class MainScene extends CCLayer {
 		this.setIsTouchEnabled(true);
 		this.setIsAccelerometerEnabled(false);
 
-    	CGSize size = CCDirector.sharedDirector().winSize();
+//    	CGSize size = CCDirector.sharedDirector().winSize();
 //		Common.centerXpix = (int)(size.width / 2);
 //		Common.centerYpix = (int)(size.height / 2);
     	    

@@ -42,7 +42,7 @@ public class MainScene extends CCLayer {
 	}
 	
 	MainScene() throws Exception {
-		
+		 
 		//Common.mainActivity.setContentView(R.layout.mapscene);
 		
 		this.setIsTouchEnabled(true);

@@ -6,12 +6,18 @@ import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout.LayoutParams;
+
 
 public class MicroActivity extends Activity {
 	
 	private CCGLSurfaceView mGLSurfaceView;
+	public static final float SUPPOSED_WIN_WIDTH  = 1024; 
+	public static final float SUPPOSED_WIN_HEIGHT = 768;
 	
     /** Called when the activity is first created. */
 	
@@ -20,6 +26,11 @@ public class MicroActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.main);
+        
+    	
+//    		CCDirector.sharedDirector().setScreenSize(SUPPOSED_WIN_WIDTH, SUPPOSED_WIN_HEIGHT);    
+//    	    CCDirector.sharedDirector().getActivity().setContentView(mGLSurfaceView, createLayoutParams());
+
         
         // set the window status, no tile, full screen and don't sleep
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -51,6 +62,31 @@ public class MicroActivity extends Activity {
         CCDirector.sharedDirector().runWithScene(scene);
         
     }
+
+    private LayoutParams createLayoutParams() {
+        final DisplayMetrics pDisplayMetrics = new DisplayMetrics();
+		CCDirector.sharedDirector().getActivity().getWindowManager().getDefaultDisplay().getMetrics(pDisplayMetrics);
+		
+		
+		final float mRatio = (float)SUPPOSED_WIN_WIDTH / SUPPOSED_WIN_HEIGHT;
+		final float realRatio = (float)pDisplayMetrics.widthPixels / pDisplayMetrics.heightPixels;
+
+		final int width;
+		final int height;
+		if(realRatio < mRatio) {
+			width = pDisplayMetrics.widthPixels;
+			height = Math.round(width / mRatio);
+		} else {
+			height = pDisplayMetrics.heightPixels;
+			width = Math.round(height * mRatio);
+		}
+
+		final LayoutParams layoutParams = new LayoutParams(width, height);
+
+		layoutParams.gravity = Gravity.CENTER;
+		return layoutParams;
+	}
+
     
     @Override
     public void onStart() {

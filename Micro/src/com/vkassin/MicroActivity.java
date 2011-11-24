@@ -16,8 +16,8 @@ import android.widget.LinearLayout.LayoutParams;
 public class MicroActivity extends Activity {
 	
 	private CCGLSurfaceView mGLSurfaceView;
-	public static final float SUPPOSED_WIN_WIDTH  = 1024; 
-	public static final float SUPPOSED_WIN_HEIGHT = 768;
+	public static final float SUPPOSED_WIN_WIDTH  = 800; 
+	public static final float SUPPOSED_WIN_HEIGHT = 600;
 	
     /** Called when the activity is first created. */
 	

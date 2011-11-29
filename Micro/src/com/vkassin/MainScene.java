@@ -39,7 +39,7 @@ public class MainScene extends CCLayer {
 
 	private CCSprite caps_close;
 	private CCSprite caps_open;
-	private ArrayList<CCSprite> ptcls;
+	private ArrayList<CCSprite> ptcls = new ArrayList<CCSprite>();
 
 	public static CCScene scene() {
 		
@@ -101,11 +101,12 @@ public class MainScene extends CCLayer {
        menu.setPosition(CGPoint.ccp(centerXpix, centerYpix / 2 * 3 ));
        
        for(int i = 0; i < Common.PARTICLES_CNT; i++) {
+    	   
     	   CCSprite spr = CCSprite.sprite("C_g_chastica.png");
-    	   spr.setVisible(false);
-    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
-    	   this.addChild(spr);
     	   ptcls.add(spr);
+    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
+    	   spr.setVisible(false);
+    	   this.addChild(spr);
        }
        
    	caps_close = CCSprite.sprite("c_g_kapsula_close.png");

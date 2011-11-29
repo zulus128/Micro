@@ -16,8 +16,6 @@ import android.widget.LinearLayout.LayoutParams;
 public class MicroActivity extends Activity {
 	
 	private CCGLSurfaceView mGLSurfaceView;
-	public static final float SUPPOSED_WIN_WIDTH  = 800; 
-	public static final float SUPPOSED_WIN_HEIGHT = 600;
 	
     /** Called when the activity is first created. */
 	
@@ -68,7 +66,7 @@ public class MicroActivity extends Activity {
 		CCDirector.sharedDirector().getActivity().getWindowManager().getDefaultDisplay().getMetrics(pDisplayMetrics);
 		
 		
-		final float mRatio = (float)SUPPOSED_WIN_WIDTH / SUPPOSED_WIN_HEIGHT;
+		final float mRatio = (float)Common.SUPPOSED_WIN_WIDTH / Common.SUPPOSED_WIN_HEIGHT;
 		final float realRatio = (float)pDisplayMetrics.widthPixels / pDisplayMetrics.heightPixels;
 
 		final int width;

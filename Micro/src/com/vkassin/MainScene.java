@@ -1,6 +1,7 @@
 package com.vkassin;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
@@ -31,7 +32,7 @@ public class MainScene extends CCLayer {
 
 	private CCSprite man;
 	private CCAction run_man;
-	private static final int man_y = 120;
+//	private static final int man_y = 120;
 	private boolean touchFlag = false;
 	
 	private CCLabel lbl;
@@ -39,7 +40,7 @@ public class MainScene extends CCLayer {
 
 	private CCSprite caps_close;
 	private CCSprite caps_open;
-	private ArrayList<CCSprite> ptcls = new ArrayList<CCSprite>();
+	private ArrayList<Particle> ptcls = new ArrayList<Particle>();
 
 	public static CCScene scene() {
 		
@@ -76,7 +77,7 @@ public class MainScene extends CCLayer {
     	
     	man = CCSprite.sprite("walk0001.png");
     	this.addChild(man);
-    	man.setPosition(CGPoint.ccp(this.centerXpix, man_y));
+    	man.setPosition(CGPoint.ccp(this.centerXpix, Common.MAN_Y));
     	
     	CCAnimation anim = CCAnimation.animation("man_run", 0.07f);
     	for(int i = 1; i < 17; i++)
@@ -98,15 +99,12 @@ public class MainScene extends CCLayer {
 //       menu.alignItemsVertically(150);
        // Add menu to the scene
        this.addChild(menu, 100);
-       menu.setPosition(CGPoint.ccp(centerXpix, centerYpix / 2 * 3 ));
+       menu.setPosition(CGPoint.ccp(centerXpix, centerYpix / 2 * 3 - 40 ));
        
        for(int i = 0; i < Common.PARTICLES_CNT; i++) {
-    	   
-    	   CCSprite spr = CCSprite.sprite("C_g_chastica.png");
+
+    	   Particle spr = new Particle(this);
     	   ptcls.add(spr);
-    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
-    	   spr.setVisible(false);
-    	   this.addChild(spr);
        }
        
    	caps_close = CCSprite.sprite("c_g_kapsula_close.png");
@@ -132,7 +130,12 @@ public class MainScene extends CCLayer {
 		caps_close.setVisible(false);
 		caps_open.setVisible(true);
 		
+		   Iterator<Particle> e = ptcls.iterator();
+		    while (e.hasNext()) {
 
+		    	Particle s = (Particle) e.next();
+		    	s.start();
+		    }
 	}
 	
 	public boolean ccTouchesBegan(MotionEvent event) {
@@ -163,14 +166,14 @@ public class MainScene extends CCLayer {
 	private void manGoRight() {
 	
 		man.flipX_ = false;
-		man.runAction(CCMoveTo.action(5f, CGPoint.ccp(man.getPosition().x + size.width, man_y)));
+		man.runAction(CCMoveTo.action(2f, CGPoint.ccp(man.getPosition().x + size.width, Common.MAN_Y)));
 		man.runAction(run_man);
 	}
 
 	private void manGoLeft() {
 		
 		man.flipX_ = true;
-		man.runAction(CCMoveTo.action(5f, CGPoint.ccp(man.getPosition().x - size.width, man_y)));
+		man.runAction(CCMoveTo.action(2f, CGPoint.ccp(man.getPosition().x - size.width, Common.MAN_Y)));
 		man.runAction(run_man);
 	}
 	

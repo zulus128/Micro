@@ -62,6 +62,7 @@ public class MicroActivity extends Activity {
     }
 
     private LayoutParams createLayoutParams() {
+    	
         final DisplayMetrics pDisplayMetrics = new DisplayMetrics();
 		CCDirector.sharedDirector().getActivity().getWindowManager().getDefaultDisplay().getMetrics(pDisplayMetrics);
 		

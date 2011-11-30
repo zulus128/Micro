@@ -9,6 +9,7 @@ import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
 import android.util.Log;
@@ -58,6 +59,14 @@ public class Particle {
     	   float x = spr.getPosition().x;
     	   float y = spr.getPosition().y;
 
+    	   CGPoint mp = Common.man.getPosition();
+    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 10)) {
+    		   
+    			SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.finger_cymbal01);
+    			
+    			y = -1;
+    	   }
+    	   
     	   int d1 = 0;
     	   
     	   if(y < 0) {

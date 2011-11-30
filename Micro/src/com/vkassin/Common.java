@@ -1,5 +1,9 @@
 package com.vkassin;
 
+import org.cocos2d.nodes.CCSprite;
+
+import android.content.Context;
+
 // https://github.com/ZhouWeikuan/cocos2d#readme
 
 public class Common {
@@ -17,6 +21,11 @@ public class Common {
 	public static final int RANGE_SPEED = 170;
 
 	public static final int MAN_Y = 120;
-	public static final int CATCH_Y = 150;
+	public static final int CATCH_Y = 200;
+	
+	public static Context cont;
+	
+	public static CCSprite man;
+
 
 }

@@ -3,6 +3,7 @@ package com.vkassin;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -40,6 +41,11 @@ public class MicroActivity extends Activity {
         mGLSurfaceView = new CCGLSurfaceView(this);
         
         setContentView(mGLSurfaceView);
+        
+        
+        Common.cont = this;
+        SoundEngine.sharedEngine().preloadEffect(this, R.raw.triangel02);
+        SoundEngine.sharedEngine().preloadEffect(this, R.raw.finger_cymbal01);
         
         // attach the OpenGL view to a window
         CCDirector.sharedDirector().attachInView(mGLSurfaceView);

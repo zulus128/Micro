@@ -16,7 +16,9 @@ import org.cocos2d.menus.CCMenuItemImage;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
@@ -30,7 +32,7 @@ public class MainScene extends CCLayer {
 	private int centerYpix;
 	private CGSize size;
 
-	private CCSprite man;
+//	private CCSprite man;
 	private CCAction run_man;
 //	private static final int man_y = 120;
 	private boolean touchFlag = false;
@@ -75,9 +77,9 @@ public class MainScene extends CCLayer {
     	this.addChild(bg);
     	bg.setPosition(CGPoint.ccp(this.centerXpix, this.centerYpix));
     	
-    	man = CCSprite.sprite("walk0001.png");
-    	this.addChild(man);
-    	man.setPosition(CGPoint.ccp(this.centerXpix, Common.MAN_Y));
+    	Common.man = CCSprite.sprite("walk0001.png");
+    	this.addChild(Common.man);
+    	Common.man.setPosition(CGPoint.ccp(this.centerXpix, Common.MAN_Y));
     	
     	CCAnimation anim = CCAnimation.animation("man_run", 0.07f);
     	for(int i = 1; i < 17; i++)
@@ -116,10 +118,16 @@ public class MainScene extends CCLayer {
 	caps_open.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
 	caps_open.setVisible(false);
 
+	CCLabelAtlas labelAtlas = CCLabelAtlas.label("0123456789", "fps_images1.png", 16, 24, '.');
+	labelAtlas.setPosition(CGPoint.ccp(100, 100));
+	this.addChild(labelAtlas);
+	
 	}
 	
 	/**This method is called when the start menu item is touched**/
 	public void startTouched(Object sender) {
+		
+		SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.triangel02);
 		
 		if(!menu.getVisible())
 			return;
@@ -165,21 +173,21 @@ public class MainScene extends CCLayer {
 	
 	private void manGoRight() {
 	
-		man.flipX_ = false;
-		man.runAction(CCMoveTo.action(2f, CGPoint.ccp(man.getPosition().x + size.width, Common.MAN_Y)));
-		man.runAction(run_man);
+		Common.man.flipX_ = false;
+		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(Common.man.getPosition().x + size.width, Common.MAN_Y)));
+		Common.man.runAction(run_man);
 	}
 
 	private void manGoLeft() {
 		
-		man.flipX_ = true;
-		man.runAction(CCMoveTo.action(2f, CGPoint.ccp(man.getPosition().x - size.width, Common.MAN_Y)));
-		man.runAction(run_man);
+		Common.man.flipX_ = true;
+		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(Common.man.getPosition().x - size.width, Common.MAN_Y)));
+		Common.man.runAction(run_man);
 	}
 	
 	private void manStop() {
 	
-		man.stopAllActions();
+		Common.man.stopAllActions();
 	}
 
 }

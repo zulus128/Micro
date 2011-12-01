@@ -1,5 +1,6 @@
 package com.vkassin;
 
+import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 
 import android.content.Context;
@@ -27,5 +28,9 @@ public class Common {
 	
 	public static CCSprite man;
 
-
+	public static CCLabelAtlas labelTime;
+	public static CCLabelAtlas labelScore;
+	
+	public static int score = 0;
+	public static int time = 0;
 }

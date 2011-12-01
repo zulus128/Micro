@@ -60,10 +60,11 @@ public class Particle {
     	   float y = spr.getPosition().y;
 
     	   CGPoint mp = Common.man.getPosition();
-    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 10)) {
+    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 50)) {
     		   
     			SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.finger_cymbal01);
-    			
+    			Common.score++;
+    			Common.labelScore.setString(String.format("%04d", Common.score));
     			y = -1;
     	   }
     	   
@@ -90,6 +91,11 @@ public class Particle {
     		   
     		   x1 = x;
     		   y1 = Common.CATCH_Y;
+    	   }
+
+    	   if(y1 < Common.CATCH_Y) {
+    		   
+    		   x1 = x;
     	   }
     	   
     	   float dist = CGPoint.ccpDistance(CGPoint.ccp(x, y), CGPoint.ccp(x1, y1));

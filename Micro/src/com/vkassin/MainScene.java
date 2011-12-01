@@ -22,11 +22,15 @@ import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 
 public class MainScene extends CCLayer {
 
+	private RefreshHandler mRedrawHandler = new RefreshHandler();  
+	  	  
 	private static final String TAG = "TR.MainScene";
 	private int centerXpix;
 	private int centerYpix;
@@ -44,6 +48,32 @@ public class MainScene extends CCLayer {
 	private CCSprite caps_open;
 	private ArrayList<Particle> ptcls = new ArrayList<Particle>();
 
+	  class RefreshHandler extends Handler {  
+		    @Override  
+		    public void handleMessage(Message msg) {  
+		      MainScene.this.updateUI();  
+		    }  
+		  
+		    public void sleep(long delayMillis) {  
+		      this.removeMessages(0);  
+		      sendMessageDelayed(obtainMessage(0), delayMillis);  
+		    }  
+		  };  
+		  
+	private void updateUI() {  
+	
+//		Log.i(TAG, "Tick");
+		
+		Common.time--;
+		Common.labelTime.setString(String.format("00.%02d", Common.time));
+
+		if(Common.time <= 0) {
+			
+		}
+		else
+			mRedrawHandler.sleep(1000);  
+	}  
+	
 	public static CCScene scene() {
 		
 		CCScene scene = CCScene.node();
@@ -118,10 +148,14 @@ public class MainScene extends CCLayer {
 	caps_open.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
 	caps_open.setVisible(false);
 
-	CCLabelAtlas labelAtlas = CCLabelAtlas.label("0123456789", "fps_images1.png", 16, 24, '.');
-	labelAtlas.setPosition(CGPoint.ccp(100, 100));
-	this.addChild(labelAtlas);
-	
+	Common.labelTime = CCLabelAtlas.label("00.30", "fps_images1.png", 16, 24, '.');
+	Common.labelTime.setPosition(CGPoint.ccp(10, 550));
+	this.addChild(Common.labelTime);
+
+	Common.labelScore = CCLabelAtlas.label("0000", "fps_images1.png", 16, 24, '.');
+	Common.labelScore.setPosition(CGPoint.ccp(700, 550));
+	this.addChild(Common.labelScore);
+		
 	}
 	
 	/**This method is called when the start menu item is touched**/
@@ -144,6 +178,10 @@ public class MainScene extends CCLayer {
 		    	Particle s = (Particle) e.next();
 		    	s.start();
 		    }
+		    
+		Common.time = 30;
+		updateUI();
+
 	}
 	
 	public boolean ccTouchesBegan(MotionEvent event) {

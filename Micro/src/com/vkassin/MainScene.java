@@ -1,8 +1,11 @@
 package com.vkassin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.cocos2d.actions.CCTimer;
+import org.cocos2d.actions.UpdateCallback;
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -19,17 +22,20 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
-import org.cocos2d.types.CGPoint;
-import org.cocos2d.types.CGSize;
+import org.cocos2d.types.*;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.CountDownTimer;
 
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 
-public class MainScene extends CCLayer {
+public class MainScene extends CCLayer implements UpdateCallback{
 
-	private RefreshHandler mRedrawHandler = new RefreshHandler();  
+//	private RefreshHandler mRedrawHandler = new RefreshHandler();  
 	  	  
 	private static final String TAG = "TR.MainScene";
 	private int centerXpix;
@@ -48,31 +54,45 @@ public class MainScene extends CCLayer {
 	private CCSprite caps_open;
 	private ArrayList<Particle> ptcls = new ArrayList<Particle>();
 
-	  class RefreshHandler extends Handler {  
-		    @Override  
-		    public void handleMessage(Message msg) {  
-		      MainScene.this.updateUI();  
-		    }  
-		  
-		    public void sleep(long delayMillis) {  
-		      this.removeMessages(0);  
-		      sendMessageDelayed(obtainMessage(0), delayMillis);  
-		    }  
-		  };  
-		  
-	private void updateUI() {  
+	private CCSprite bg, bg1;
 	
-//		Log.i(TAG, "Tick");
-		
-		Common.time--;
-		Common.labelTime.setString(String.format("00.%02d", Common.time));
-
-		if(Common.time <= 0) {
-			
-		}
-		else
-			mRedrawHandler.sleep(1000);  
-	}  
+//	private CCTimer timer;
+	
+//	  class RefreshHandler extends Handler {  
+//		    @Override  
+//		    public void handleMessage(Message msg) {  
+//		      MainScene.this.updateUI();  
+//		    }  
+//		  
+//		    public void sleep(long delayMillis) {  
+//		      this.removeMessages(0);  
+//		      sendMessageDelayed(obtainMessage(0), delayMillis);  
+//		    }  
+//		  };  
+//		  
+//	private void updateUI() {  
+//	
+////		Log.i(TAG, "Tick");
+//		
+//		Common.time--;
+////		Common.labelTime.setString(String.format("00.%02d", Common.time));
+//
+//		this.removeChild(Common.labelTime, true);
+//		
+//		Common.labelTime = CCLabelAtlas.label(String.format("00:%02d", Common.time), "creon_game_numbers.png", 26, 34, '0');
+//		Common.labelTime.setPosition(CGPoint.ccp(30, 540));
+//		this.addChild(Common.labelTime);
+//
+//		if(Common.time <= 0) {
+//			
+////	        CCLabel lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
+////	        lbl.setPosition(CGPoint.ccp(345, 240));
+////	        Common.layer.addChild(lbl);
+//
+//		}
+//		else
+//			mRedrawHandler.sleep(1000);  
+//	}  
 	
 	public static CCScene scene() {
 		
@@ -99,13 +119,20 @@ public class MainScene extends CCLayer {
 		this.setIsTouchEnabled(true);
 		this.setIsAccelerometerEnabled(false);
 
+		Common.layer = this;
+		
     	size = CCDirector.sharedDirector().winSize();
 		centerXpix = (int)(size.width / 2);
 		centerYpix = (int)(size.height / 2);
     	    
-    	CCSprite bg = CCSprite.sprite("creon_game_background.png");
+    	bg = CCSprite.sprite("creon_game_background.png");
     	this.addChild(bg);
     	bg.setPosition(CGPoint.ccp(this.centerXpix, this.centerYpix));
+
+    	bg1 = CCSprite.sprite("creon_game_background1.png");
+    	this.addChild(bg1);
+    	bg1.setPosition(CGPoint.ccp(this.centerXpix, this.centerYpix));
+    	bg1.setVisible(false);
     	
     	Common.man = CCSprite.sprite("walk0001.png");
     	this.addChild(Common.man);
@@ -117,7 +144,7 @@ public class MainScene extends CCLayer {
     	
     	run_man = CCRepeatForever.action(CCAnimate.action(anim));
     	
-//        lbl = CCLabel.makeLabel("Hello World!", "DroidSans", 24);
+//        lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
 //        this.addChild(lbl);
 //        lbl.setPosition(CGPoint.ccp(345, 240));
         
@@ -148,16 +175,148 @@ public class MainScene extends CCLayer {
 	caps_open.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
 	caps_open.setVisible(false);
 
-	Common.labelTime = CCLabelAtlas.label("00.30", "fps_images1.png", 16, 24, '.');
-	Common.labelTime.setPosition(CGPoint.ccp(10, 550));
+	Common.labelTime = CCLabelAtlas.label("00:30", "creon_game_numbers.png", 26, 34, '0');
+	Common.labelTime.setPosition(CGPoint.ccp(30, 540));
 	this.addChild(Common.labelTime);
 
-	Common.labelScore = CCLabelAtlas.label("0000", "fps_images1.png", 16, 24, '.');
-	Common.labelScore.setPosition(CGPoint.ccp(700, 550));
+	Common.labelScore = CCLabelAtlas.label("0000", "creon_game_numbers.png", 26, 34, '0');
+	Common.labelScore.setPosition(CGPoint.ccp(670, 540));
 	this.addChild(Common.labelScore);
 		
+//	timer = new CCTimer(this, this, 1f);
+		
+//	new CountDownTimer(30000, 1000) {
+//
+//	     public void onTick(long millisUntilFinished) {
+//	         Log.i(TAG,"seconds remaining: " + millisUntilFinished / 1000);
+//	     }
+//
+//	     public void onFinish() {
+//	         Log.i(TAG,"done!");
+//	         
+//		        CCLabel lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
+//		        lbl.setPosition(CGPoint.ccp(345, 240));
+//		        Common.layer.addChild(lbl);
+//
+//	     }
+//	  }.start();
+
+	CCLabel lbl1 = CCLabel.makeLabel("Демо!!!", "DroidSans", 24);
+	lbl1.setColor(ccColor3B.ccRED);
+	lbl1.setPosition(CGPoint.ccp(700, 80));
+	Common.layer.addChild(lbl1,500);
+
+	  
 	}
-	
+
+	public void update(float arg0) {
+
+		Log.i(TAG, "update");
+//		timer.update(1f);
+	}
+	public void rtick(float dt){
+
+//		Log.i(TAG, "Tick");
+		
+		Common.time--;
+		Common.labelTime.setString(String.format("00:%02d", Common.time));
+
+		if(Common.time <= 0) {
+			
+			
+			this.unscheduleAllSelectors();
+			caps_close.setVisible(true);
+			caps_open.setVisible(false);
+
+			   Iterator<Particle> e = ptcls.iterator();
+			    while (e.hasNext()) {
+
+			    	Particle s = (Particle) e.next();
+			    	s.reset();
+			    }
+
+			
+			//if(Common.level == 1) {
+			if(Common.score > Common.cnt / 2) {
+//			if(true) {
+
+				lbl = CCLabel.makeLabel("Поздравляем! Вы прошли "+Common.level+"-й этап!", "DroidSans", 36);
+				lbl.setColor(ccColor3B.ccBLUE);
+		        lbl.setPosition(CGPoint.ccp(400, 340));
+		        this.addChild(lbl);
+		        
+		        if(Common.level == 1)
+		        	this.schedule("goSecond", 5.0f);
+		        else
+		        	this.schedule("goVideo", 5.0f);
+
+			}
+			else {
+	        
+				lbl = CCLabel.makeLabel(String.format("Вы набрали %04d баллов!", Common.score), "DroidSans", 36);
+				lbl.setColor(ccColor3B.ccBLUE);
+				lbl.setPosition(CGPoint.ccp(350, 340));
+		        this.addChild(lbl);
+		        this.schedule("goVideo", 5.0f);
+			}
+			//}
+
+		}
+
+//        CCLabel lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
+//        lbl.setPosition(CGPoint.ccp(345, 240));
+//        Common.layer.addChild(lbl);
+
+	}
+
+	public void goVideo(float dt){
+
+		this.unscheduleAllSelectors();
+		this.removeChild(lbl, false);
+		
+		Intent viewMediaIntent = new Intent();   
+		viewMediaIntent.setAction(android.content.Intent.ACTION_VIEW);   
+		File file = new File("krion.avi");   
+		viewMediaIntent.setDataAndType(Uri.fromFile(file), "video/*");   
+		viewMediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		Common.cont.startActivity(viewMediaIntent); 
+		
+	}
+
+	public void goSecond(float dt){
+		
+		this.unscheduleAllSelectors();
+		this.removeChild(lbl, false);
+		
+		caps_close.setVisible(false);
+		caps_open.setVisible(true);
+		
+		   Iterator<Particle> e = ptcls.iterator();
+		    while (e.hasNext()) {
+
+		    	Particle s = (Particle) e.next();
+		    	s.start();
+		    }
+		    
+		Common.time = 30;
+		Common.cnt = 0;
+		Common.level = 2;
+    	
+		bg.setVisible(false);
+    	bg1.setVisible(true);
+
+		this.schedule("rtick", 1.0f);
+
+	}
+
+//	public void rtick(Object sender){
+//	    this.rtick(0.0f);
+//	}
+//	public void rtick() {
+//		
+//		Log.i(TAG, "Tick");
+//	}
+
 	/**This method is called when the start menu item is touched**/
 	public void startTouched(Object sender) {
 		
@@ -180,7 +339,15 @@ public class MainScene extends CCLayer {
 		    }
 		    
 		Common.time = 30;
-		updateUI();
+		Common.cnt = 0;
+		Common.level = 1;
+		
+		bg1.setVisible(false);
+    	bg.setVisible(true);
+
+//		updateUI();
+
+		this.schedule("rtick", 1.0f);
 
 	}
 	
@@ -227,5 +394,6 @@ public class MainScene extends CCLayer {
 	
 		Common.man.stopAllActions();
 	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.vkassin;
 
+import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 
@@ -25,12 +26,16 @@ public class Common {
 	public static final int CATCH_Y = 200;
 	
 	public static Context cont;
+	public static CCLayer layer;
 	
 	public static CCSprite man;
 
 	public static CCLabelAtlas labelTime;
 	public static CCLabelAtlas labelScore;
 	
+	public static int level = 1;
+
 	public static int score = 0;
+	public static int cnt = 0;
 	public static int time = 0;
 }

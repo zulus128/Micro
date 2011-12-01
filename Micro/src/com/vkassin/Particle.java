@@ -50,6 +50,13 @@ public class Particle {
 
 	   }
 	   
+	   public void reset() {
+		   
+		   spr.stopAllActions();
+    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, -1 /*Common.CAPSULE_POSITION_Y*/));
+    	   spr.setVisible(false);
+	   }
+	   
 	   public void start() {
 		
     	   int rY = Common.RANGE_Y / 10 + rand.nextInt(Common.RANGE_Y);
@@ -76,6 +83,7 @@ public class Particle {
     		   x = Common.CAPSULE_POSITION_X;
     		   y = Common.CAPSULE_POSITION_Y;
     		   d1 = rand.nextInt(20);
+    		   Common.cnt++;
     	   }
 //    	   else {
 //    		   
@@ -99,7 +107,7 @@ public class Particle {
     	   }
     	   
     	   float dist = CGPoint.ccpDistance(CGPoint.ccp(x, y), CGPoint.ccp(x1, y1));
-    	   float time = dist / speed;
+    	   float time = dist / (speed * (Common.level==1?1.0f:1.2f));
 		   
 //    	   Log.i(TAG, "d = "+d1+"x = "+x+" y = "+y+" x1 = "+x1+" y1 = "+y1+" time = "+time+ " dist = "+dist);
 		   CCMoveTo m1 = CCMoveTo.action(time, CGPoint.ccp(x1, y1));

@@ -1,6 +1,9 @@
 package com.vkassin;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,13 +28,21 @@ import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.*;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.CountDownTimer;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 public class MainScene extends CCLayer implements UpdateCallback{
 
@@ -183,24 +194,6 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	Common.labelScore.setPosition(CGPoint.ccp(670, 540));
 	this.addChild(Common.labelScore);
 		
-//	timer = new CCTimer(this, this, 1f);
-		
-//	new CountDownTimer(30000, 1000) {
-//
-//	     public void onTick(long millisUntilFinished) {
-//	         Log.i(TAG,"seconds remaining: " + millisUntilFinished / 1000);
-//	     }
-//
-//	     public void onFinish() {
-//	         Log.i(TAG,"done!");
-//	         
-//		        CCLabel lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
-//		        lbl.setPosition(CGPoint.ccp(345, 240));
-//		        Common.layer.addChild(lbl);
-//
-//	     }
-//	  }.start();
-
 	CCLabel lbl1 = CCLabel.makeLabel("Демо!!!", "DroidSans", 24);
 	lbl1.setColor(ccColor3B.ccRED);
 	lbl1.setPosition(CGPoint.ccp(700, 80));
@@ -255,7 +248,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	        
 				lbl = CCLabel.makeLabel(String.format("Вы набрали %04d баллов!", Common.score), "DroidSans", 36);
 				lbl.setColor(ccColor3B.ccBLUE);
-				lbl.setPosition(CGPoint.ccp(350, 340));
+				lbl.setPosition(CGPoint.ccp(400, 340));
 		        this.addChild(lbl);
 		        this.schedule("goVideo", 5.0f);
 			}
@@ -273,14 +266,30 @@ public class MainScene extends CCLayer implements UpdateCallback{
 
 		this.unscheduleAllSelectors();
 		this.removeChild(lbl, false);
+
+		menu.setVisible(true);
+		Log.i(TAG, "goVideo !!!");
+				
+		SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.triangel02);
+
+//		File = new File();
+//		listFiles();
 		
-		Intent viewMediaIntent = new Intent();   
-		viewMediaIntent.setAction(android.content.Intent.ACTION_VIEW);   
-		File file = new File("krion.avi");   
-		viewMediaIntent.setDataAndType(Uri.fromFile(file), "video/*");   
-		viewMediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		Common.cont.startActivity(viewMediaIntent); 
+		File s = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+
+//		CCLabel lbl = CCLabel.makeLabel(s.toString(), "DroidSans", 24);
+//		lbl.setPosition(CGPoint.ccp(345, 240));
+//		Common.layer.addChild(lbl,600);
+//		
+//		Log.i(TAG, "root dir = " + s.toString());
 		
+//		String movieurl = "/sdcard/Data/krion.mp4";
+//		String movieurl = s.toString() + "/krion.mp4";
+		String movieurl = "/data/local/krion.mp4";
+//		String movieurl = "android.resource://com.vkassin/raw/krion.mp4";
+		Intent intentToPlayVideo = new Intent(Intent.ACTION_VIEW);
+		intentToPlayVideo.setDataAndType(Uri.parse(movieurl), "video/*");
+		Common.cont.startActivity(intentToPlayVideo);
 	}
 
 	public void goSecond(float dt){
@@ -298,9 +307,13 @@ public class MainScene extends CCLayer implements UpdateCallback{
 		    	s.start();
 		    }
 		    
-		Common.time = 30;
+		Common.time = 50;
 		Common.cnt = 0;
+		Common.score = 0;
 		Common.level = 2;
+		
+		Common.labelScore.setString(String.format("%04d", Common.score));
+
     	
 		bg.setVisible(false);
     	bg1.setVisible(true);
@@ -338,10 +351,13 @@ public class MainScene extends CCLayer implements UpdateCallback{
 		    	s.start();
 		    }
 		    
-		Common.time = 30;
+		Common.time = 50;
 		Common.cnt = 0;
+		Common.score = 0;
 		Common.level = 1;
 		
+		Common.labelScore.setString(String.format("%04d", Common.score));
+
 		bg1.setVisible(false);
     	bg.setVisible(true);
 
@@ -378,6 +394,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	
 	private void manGoRight() {
 	
+		manStop();
 		Common.man.flipX_ = false;
 		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(Common.man.getPosition().x + size.width, Common.MAN_Y)));
 		Common.man.runAction(run_man);
@@ -385,6 +402,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 
 	private void manGoLeft() {
 		
+		manStop();
 		Common.man.flipX_ = true;
 		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(Common.man.getPosition().x - size.width, Common.MAN_Y)));
 		Common.man.runAction(run_man);

@@ -46,6 +46,9 @@ public class MicroActivity extends Activity {
         Common.cont = this;
         SoundEngine.sharedEngine().preloadEffect(this, R.raw.triangel02);
         SoundEngine.sharedEngine().preloadEffect(this, R.raw.finger_cymbal01);
+        SoundEngine.sharedEngine().preloadEffect(this, R.raw.odobr);
+        SoundEngine.sharedEngine().preloadEffect(this, R.raw.razoch);
+
         
         // attach the OpenGL view to a window
         CCDirector.sharedDirector().attachInView(mGLSurfaceView);

@@ -29,7 +29,7 @@ public class Particle {
 		   lay = l;
 		   
 		   spr = CCSprite.sprite("C_g_chastica.png");
-    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, -1 /*Common.CAPSULE_POSITION_Y*/));
+    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, -1000 /*Common.CAPSULE_POSITION_Y*/));
     	   spr.setVisible(false);
     	   lay.addChild(spr, 50);
 
@@ -53,7 +53,7 @@ public class Particle {
 	   public void reset() {
 		   
 		   spr.stopAllActions();
-    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, -1 /*Common.CAPSULE_POSITION_Y*/));
+    	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, -1000 /*Common.CAPSULE_POSITION_Y*/));
     	   spr.setVisible(false);
 	   }
 	   
@@ -67,18 +67,25 @@ public class Particle {
     	   float y = spr.getPosition().y;
 
     	   CGPoint mp = Common.man.getPosition();
-    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 50)) {
-    		   
-    			SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.finger_cymbal01);
+    	   if(Math.abs(y - Common.CATCH_Y) < 3) {
+    		   boolean b1 = (!Common.man.flipX_ && (x > mp.x) && (x < (mp.x + 45)));
+    		   boolean b2 = (Common.man.flipX_ && (x < mp.x) && (x > (mp.x - 45)));
+//    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 50)) {
+    		   if(b1 || b2) {
+    			SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.odobr);
     			Common.score++;
     			Common.labelScore.setString(String.format("%04d", Common.score));
-    			y = -1;
+    			y = -1000;
+    		   }
     	   }
     	   
     	   int d1 = 0;
     	   
     	   if(y < 0) {
-    		   
+    	
+    		   if(y > -999)
+    				SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.razoch);
+
         	   spr.setPosition(CGPoint.ccp(Common.CAPSULE_POSITION_X, Common.CAPSULE_POSITION_Y));
     		   x = Common.CAPSULE_POSITION_X;
     		   y = Common.CAPSULE_POSITION_Y;

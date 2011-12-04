@@ -67,9 +67,9 @@ public class Particle {
     	   float y = spr.getPosition().y;
 
     	   CGPoint mp = Common.man.getPosition();
-    	   if(Math.abs(y - Common.CATCH_Y) < 3) {
-    		   boolean b1 = (!Common.man.flipX_ && (x > mp.x) && (x < (mp.x + 45)));
-    		   boolean b2 = (Common.man.flipX_ && (x < mp.x) && (x > (mp.x - 45)));
+    	   if(Common.stopped && (Math.abs(y - Common.CATCH_Y) < 3)) {
+    		   boolean b1 = (!Common.man.flipX_ && (x > (mp.x + 45)) && (x < (mp.x + 90)));
+    		   boolean b2 = (Common.man.flipX_ && (x < (mp.x - 45)) && (x > (mp.x - 90)));
 //    	   if((Math.abs(y - Common.CATCH_Y) < 3) && (Math.abs(x - mp.x) < 50)) {
     		   if(b1 || b2) {
     			SoundEngine.sharedEngine().playEffect(Common.cont, R.raw.odobr);

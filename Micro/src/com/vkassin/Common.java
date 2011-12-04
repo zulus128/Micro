@@ -38,4 +38,7 @@ public class Common {
 	public static int score = 0;
 	public static int cnt = 0;
 	public static int time = 0;
+	
+	public static boolean stopped = true;
+
 }

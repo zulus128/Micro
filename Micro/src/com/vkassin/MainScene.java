@@ -168,7 +168,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 //    	
 //    	fireAction = CCRepeatForever.action(CCAnimate.action(fanim0));
 
-    	Common.man = CCSprite.sprite("walk0001.png");
+    	Common.man = CCSprite.sprite("catch.png");
     	this.addChild(Common.man, 55);
     	Common.man.setPosition(CGPoint.ccp(this.centerXpix, Common.MAN_Y));
     	
@@ -176,7 +176,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
     	for(int i = 1; i < 17; i++)
     		anim.addFrame(String.format("walk%04d.png",i));
     	
-    	run_man = CCRepeatForever.action(CCAnimate.action(anim));
+    	run_man = CCRepeatForever.action(CCAnimate.action(anim, true));
     	
 //        lbl = CCLabel.makeLabel("Вы набрали", "DroidSans", 36);
 //        this.addChild(lbl);
@@ -221,7 +221,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	Common.labelScore.setPosition(CGPoint.ccp(670, 540));
 	this.addChild(Common.labelScore);
 		
-	CCLabel lbl1 = CCLabel.makeLabel("Демо!!!", "DroidSans", 24);
+	CCLabel lbl1 = CCLabel.makeLabel("Демо - 1 !!!", "ComicSansMC", 24);
 	lbl1.setColor(ccColor3B.ccRED);
 	lbl1.setPosition(CGPoint.ccp(700, 80));
 	Common.layer.addChild(lbl1,500);
@@ -448,7 +448,9 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	
 	private void manGoRight() {
 	
-		manStop();
+//		manStop();
+		Common.stopped = false;
+		Common.man.stopAllActions();
 		Common.man.flipX_ = false;
 		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(/*Common.man.getPosition().x + */size.width, Common.MAN_Y)));
 		Common.man.runAction(run_man);
@@ -456,7 +458,9 @@ public class MainScene extends CCLayer implements UpdateCallback{
 
 	private void manGoLeft() {
 		
-		manStop();
+//		manStop();
+		Common.stopped = false;
+		Common.man.stopAllActions();
 		Common.man.flipX_ = true;
 		Common.man.runAction(CCMoveTo.action(2f, CGPoint.ccp(0/*Common.man.getPosition().x - size.width*/, Common.MAN_Y)));
 		Common.man.runAction(run_man);
@@ -464,7 +468,18 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	
 	private void manStop() {
 	
+		Common.stopped = true;
+
 		Common.man.stopAllActions();
+    	
+		CGPoint p = Common.man.getPosition();
+		boolean b = Common.man.flipX_;
+		this.removeChild(Common.man, true);
+    	Common.man = CCSprite.sprite("catch.png");
+    	Common.man.setFlipX(b);
+		this.addChild(Common.man, 55);
+    	Common.man.setPosition(p);
+    	Log.i(TAG, "b = "+b);
 	}
 
 

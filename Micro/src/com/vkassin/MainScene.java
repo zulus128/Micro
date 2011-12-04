@@ -67,8 +67,8 @@ public class MainScene extends CCLayer implements UpdateCallback{
 	private CCSprite caps_close;
 	private CCSprite caps_open;
 	
-//	private CCSprite fireSprite;
-//	private CCAction fireAction;
+	private CCSprite fireSprite;
+	private CCAction fireAction;
 	
 	private ArrayList<Particle> ptcls = new ArrayList<Particle>();
 
@@ -153,20 +153,20 @@ public class MainScene extends CCLayer implements UpdateCallback{
     	bg1.setVisible(false);
     	
     	
-//    	fireSprite = CCSprite.sprite("fireWorks0001.png");
-//    	this.addChild(fireSprite, 75);
-//    	fireSprite.setPosition(CGPoint.ccp(this.centerXpix, this.centerYpix));
-//    	fireSprite.setVisible(false);
+    	fireSprite = CCSprite.sprite("fireWorks0021.png");
+    	this.addChild(fireSprite, 75);
+    	fireSprite.setPosition(CGPoint.ccp(this.centerXpix, this.centerYpix + 60));
+    	fireSprite.setVisible(false);
     	
-//    	CCAnimation fanim0 = CCAnimation.animation("fire_anim0", 0.08f);
-//    	for(int i = 1; i < 9; i++)
-//    		fanim0.addFrame(String.format("fireWorks%04d.png",i));
-//
+    	CCAnimation fanim0 = CCAnimation.animation("fire_anim0", 0.15f);
+    	for(int i = 21; i < 29; i++)
+    		fanim0.addFrame(String.format("fireWorks%04d.png",i));
+
 //    	CCAnimation fanim1 = CCAnimation.animation("fire_anim0", 0.08f);
 //    	for(int i = 9; i < 18; i++)
 //    		fanim1.addFrame(String.format("fireWorks%04d.png",i));
 //    	
-//    	fireAction = CCRepeatForever.action(CCAnimate.action(fanim0));
+    	fireAction = CCRepeatForever.action(CCAnimate.action(fanim0));
 
     	Common.man = CCSprite.sprite("catch.png");
     	this.addChild(Common.man, 55);
@@ -256,7 +256,7 @@ public class MainScene extends CCLayer implements UpdateCallback{
 			    }
 
 			
-			//if(Common.level == 1) {
+//			if(Common.level == 1) {
 			if(Common.score > Common.cnt / 2) {
 //			if(true) {
 
@@ -265,8 +265,8 @@ public class MainScene extends CCLayer implements UpdateCallback{
 		        lbl.setPosition(CGPoint.ccp(400, 340));
 		        this.addChild(lbl);
 		        
-//		        fireSprite.setVisible(true);
-//		        fireSprite.runAction(fireAction);
+		        fireSprite.setVisible(true);
+		        fireSprite.runAction(fireAction);
 
 		        
 		        if(Common.level == 1)
@@ -298,8 +298,8 @@ public class MainScene extends CCLayer implements UpdateCallback{
 		this.unscheduleAllSelectors();
 		this.removeChild(lbl, false);
 
-//		fireSprite.stopAllActions();
-//		fireSprite.setVisible(false);
+		fireSprite.stopAllActions();
+		fireSprite.setVisible(false);
 		
 		menu.setVisible(true);
 		Log.i(TAG, "goVideo !!!");
@@ -331,8 +331,8 @@ public class MainScene extends CCLayer implements UpdateCallback{
 		this.unscheduleAllSelectors();
 		this.removeChild(lbl, false);
 		
-//		fireSprite.stopAllActions();
-//		fireSprite.setVisible(false);
+		fireSprite.stopAllActions();
+		fireSprite.setVisible(false);
 
 		caps_close.setVisible(false);
 		caps_open.setVisible(true);

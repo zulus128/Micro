@@ -114,7 +114,7 @@ public class Particle {
     	   }
     	   
     	   float dist = CGPoint.ccpDistance(CGPoint.ccp(x, y), CGPoint.ccp(x1, y1));
-    	   float time = (float) dist / (speed * (Common.level==1?1.3f:1.9f));
+    	   float time = (float) dist / (speed * (Common.level==1?1.1f:1.8f));
 		   
 //    	   Log.i(TAG, "d = "+d1+"x = "+x+" y = "+y+" x1 = "+x1+" y1 = "+y1+" time = "+time+ " dist = "+dist);
 		   CCMoveTo m1 = CCMoveTo.action(time, CGPoint.ccp(x1, y1));
